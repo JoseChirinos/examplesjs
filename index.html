@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Obtener Datos</title>
+    <style>
+        table,tr,td{
+            border: 1px solid gray;
+            border-collapse: collapse;
+            padding: 15px;
+        }
+        thead{
+            background: teal;
+            background: #3F51B5;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h4>
+        Ejemplo extraer datos de tabla HTML
+        <small>By <a href="https://github.com/JoseChirinos/examplesjs">Jose Chirinos</a></small>
+    </h4>
+    <table id="tablaDeDatos">
+        <!-- head de tu tabla -->
+        <thead>
+            <td>Día\Mes</td>
+            <td>Enero</td>
+            <td>Febrero</td>
+            <td>Marzo</td>
+        </thead>
+        <!-- filas -->
+        <tbody>
+            <tr>
+                <td>Lunes</td>
+                <td>23</td>
+                <td>4</td>
+                <td>342</td>
+            </tr>
+            <tr>
+                <td>Martes</td>
+                <td>3</td>
+                <td>34</td>
+                <td>23</td>
+            </tr>
+            <tr>
+                <td>Miercoles</td>
+                <td>567</td>
+                <td>23</td>
+                <td>65</td>
+            </tr>
+            <tr>
+                <td>Jueves</td>
+                <td>354</td>
+                <td>76</td>
+                <td>67</td>
+            </tr>
+            <tr>
+                <td>Viernes</td>
+                <td>34</td>
+                <td>345</td>
+                <td>345</td>
+            </tr>
+            <tr>
+                <td>Sabado</td>
+                <td>43</td>
+                <td>345</td>
+                <td>587</td>
+            </tr>
+            <tr>
+                <td>Domingo</td>
+                <td>867</td>
+                <td>354</td>
+                <td>73</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>Para ver el resultado:
+        <ul>
+            <li>1. Abrir la consola</li>
+            <li>2. Te genera un Objeto</li>
+            <li>3. Escribe: <strong> chart.mesesLabel</strong> para tener todos los labels superiores</li>
+            <li>4. Escribe: <strong> chart.diasLabel</strong> para tener todos los labels laterales</li>
+            <li>5. Escribe: <strong> chart.datos</strong> para obtener matriz de todo</li>
+            <li>6. Disfrutalo...!!!</li>
+        </ul>
+    </p>
+    <p>Funciona con cualquier tabla dinamica</p>
+
+    <script>
+        /* creamos un objeto vacio */
+        var chart = {
+            mesesLabel:[],
+            diasLabel:[],
+            datos:[]
+        };
+        function obtenerDatos(){
+            /* la tabla*/
+            var tabla = document.querySelector('#tablaDeDatos');
+            /*  obtner los elementos:
+
+                tabla.children[1].children
+
+                con:
+                    tabla -> obtenemos toda la tabla del dom
+                con:
+                    tabla.children -> obtenemos todos los hijos de la tabla <thead> y <tbody>
+                con:
+                    tabla.children[0] -> obtenemos al <thead>
+                    tabla.children[0].children -> obtenemos a los hijos del <thead>  = a <td>
+                    tabla.children[0].children[0].children -> obtenemos todos los <td>
+            */
+
+            /* Con esto sacamos los Dias */
+            [].forEach.call(tabla.children[0].children[0].children,function(i,key){
+                if(key != 0){ // omitimos el primero porque es: Día/Mes, no nos sirve
+                    chart.mesesLabel.push(i.textContent); // añadimos el nombre del dia
+                }
+            });
+            [].forEach.call(tabla.children[1].children,function(i,key){
+                chart.diasLabel.push(i.children[0].textContent);
+            });
+            /* Ahora obtenemos todos los datos */
+            [].forEach.call(tabla.children[1].children,function(i,key){
+                    var index = key;
+                    chart.datos[index] = new Array();
+                    [].forEach.call(i.children,function(content,_key){
+                        if(_key != 0){
+                            /* aqui obtenemos los datos y los convertimos a float */
+                            chart.datos[index][_key-1] = parseFloat(content.textContent);
+                        }
+                    })
+            });
+            console.log(chart);
+        }
+        obtenerDatos();
+    </script>
+</body>
+</html>
